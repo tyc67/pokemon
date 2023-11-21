@@ -8,6 +8,14 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      width:{
+        'flex-half': "calc((100%/2) - 15px)",
+        'flex-fourth': "calc((100% / 4) - 20px)"
+      },
+      fontSize: {
+        'xxs': '.6rem',
+        'smaller': '.8rem'
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
