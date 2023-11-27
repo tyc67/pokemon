@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import PaginateButton from '@/app/components/PaginateButton'
 import EvolutionChain from '@/app/components/EvolutionChain'
 import {
@@ -8,7 +7,8 @@ import {
   getPokemonSpecies,
   getPokemonEvolution,
 } from '@/app/utils/fetch'
-import { typeColor } from '@/app/utils/typeColorIndex'
+import PokemonCharacter from '@/app/components/PokemonCharacter'
+import RadarChart from '@/app/components/RadarChart'
 
 function findPreviousAndNextUrls(name: string, pokemonList: { name: string; url: string }[]) {
   const index = pokemonList.findIndex((item) => item.name === name)
@@ -39,7 +39,7 @@ function extractEvolutionChain(chain: any) {
   return results
 }
 
-export default async function PokeDeatil({ params: { name } }: { params: { name: string } }) {
+export default async function PokemonDeatil({ params: { name } }: { params: { name: string } }) {
   const pokemonList = await getPokemonList('10000', '0')
   //TODO: how to cache List data, reduce fetch frequency
   const pokemonData = await getPokemonByNameOrId(name)
@@ -78,69 +78,39 @@ export default async function PokeDeatil({ params: { name } }: { params: { name:
     return { id, name, imageSrc, type }
   })
 
+  const capitalizeName = pokemonData.name.charAt(0).toUpperCase() + name.slice(1)
+
   return (
     <div className="flex flex-col items-center">
       <PaginateButton prevAndNext={prevAndNextPokemon} />
-      <span className="flex flex-row justify-center gap-4 py-3">
-        <p>{pokemonData.name}</p>
-        <p>{`#${pokemonIdTag}`}</p>
+      <span className="flex flex-row justify-center gap-4 py-3 text-3xl">
+        <p>{capitalizeName}</p>
+        <p className="text-gray-600">{`#${pokemonIdTag}`}</p>
       </span>
-      <div className="flex flex-col justify-center md:flex-row">
-        <div className="flex h-60 w-60  items-center justify-center bg-slate-100">
-          <Image src={imageSrc} width={200} height={200} alt="list-item" />
-        </div>
-        <div className="w-60">
-          <span className="flex flex-row gap-3">
-            <p className="font-medium">Abilities: </p>
-            {abilities.map((ability, idx) => (
-              <p key={idx}>{ability}</p>
-            ))}
-          </span>
-          <span className="flex flex-row items-center gap-3">
-            <p className="font-medium">Types: </p>
-            <span className="inline-flex gap-2">
-              {types.map((type, idx) => {
-                const typeBgColor = typeColor(type)
-                return (
-                  <p
-                    key={idx}
-                    className="h-fit rounded-md px-4 py-0.5 text-xs"
-                    style={{ backgroundColor: typeBgColor }}
-                  >
-                    {type}
-                  </p>
-                )
-              })}
-            </span>
-          </span>
-          <span className="flex flex-row gap-3">
-            <p className="font-medium">Weakness: </p>
-            {weakness.map((weakto, idx) => {
-              const typeBgColor = typeColor(weakto)
-              return (
-                <p
-                  key={idx}
-                  className="h-fit rounded-md px-4 py-0.5 text-xs"
-                  style={{ backgroundColor: typeBgColor }}
-                >
-                  {weakto}
-                </p>
-              )
-            })}
-          </span>
-          <div>
-            {stats.map((data, idx) => (
-              <span key={idx} className="flex flex-row">
-                <p className="w-[9rem]">{data.name}</p>
-                <p>{data.baseStat}</p>
-              </span>
-            ))}
-          </div>
-          <div>
-            <span className="flex flex-row gap-3">
-              <p>catch rate</p>
-              <p>{catchRate}</p>
-            </span>
+      <div className="flex flex-col items-center justify-center md:flex-row">
+        <PokemonCharacter
+          imageSrc={imageSrc}
+          abilities={abilities}
+          catchRate={catchRate}
+          types={types}
+          weakness={weakness}
+        />
+        <div className="mt-2 rounded-md bg-gray-200 p-2 md:ml-2 md:mt-0 ">
+          <div className="flex h-60 w-60 items-center justify-center">
+            <RadarChart
+              data={[
+                { key: `${pokemonData.name}-stats-0`, label: 'HP', value: stats[0].baseStat },
+                { key: `${pokemonData.name}-stats-1`, label: 'Attack', value: stats[1].baseStat },
+                { key: `${pokemonData.name}-stats-2`, label: 'Defense', value: stats[2].baseStat },
+                { key: `${pokemonData.name}-stats-3`, label: 'Sp.Atk', value: stats[3].baseStat },
+                { key: `${pokemonData.name}-stats-4`, label: 'Sp.Def', value: stats[4].baseStat },
+                { key: `${pokemonData.name}-stats-5`, label: 'Speed', value: stats[5].baseStat },
+              ]}
+              domainMax={150}
+              width={230}
+              height={230}
+              padding={30}
+            />
           </div>
         </div>
       </div>

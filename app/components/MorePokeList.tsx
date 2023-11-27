@@ -36,7 +36,7 @@ export default function MorePokeList() {
 
   return (
     <>
-      <div className="flex flex-1 flex-row flex-wrap">
+      <div className="flex flex-1 flex-row flex-wrap justify-center">
         {pokeList.map((data) => (
           <ListItem
             key={data.id}

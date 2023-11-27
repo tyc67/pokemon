@@ -12,15 +12,13 @@ export default async function Home() {
   const pokemonDataId4 = await getPokemonByURL(pokemonListData.results[3].url)
   const pokemonDataId5 = await getPokemonByURL(pokemonListData.results[4].url)
   const pokemonDataId6 = await getPokemonByURL(pokemonListData.results[5].url)
-
   const pokemonDataId9 = await getPokemonByURL(pokemonListData.results[24].url)
 
-  //display link need to be fix
   return (
     <>
       <div className="w-full">
         <div className="flex h-[600px] flex-col bg-green-200 p-6 pb-6 lg:flex-row">
-          <DisplayHeroText title={pokemonDataId9.name} />
+          <DisplayHeroText title={pokemonDataId9.name} link={`/items/${pokemonDataId9.name}`} />
           <div className="relative flex flex-1 items-center justify-center">
             <Image
               src={pokemonDataId9.sprites.other.home.front_default}

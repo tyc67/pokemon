@@ -2,6 +2,7 @@ import ListItem from '../components/ListItem'
 import { PokemonItem } from '../types/display'
 import { getPokemonList, getPokemonByURL } from '../utils/fetch'
 import MorePokeList from '../components/MorePokeList'
+import PokemonListBox from '../components/PokemonListBox'
 
 export default async function Pokedex() {
   const pokemonListData = await getPokemonList('12', '0')
@@ -14,12 +15,15 @@ export default async function Pokedex() {
     types: item.types.map((data: any) => data.type.name),
   }))
 
-  //TODO: SortByDropDown
-
   return (
     <div className="flex w-full flex-col">
-      <p className="p-2 text-4xl font-light">Sort By</p>
-      <div className="flex flex-1 flex-row flex-wrap">
+      <div className="flex justify-end">
+        <span className="flex flex-row items-center">
+          <p className="p-2 text-sm font-light">Sort By</p>
+          <PokemonListBox />
+        </span>
+      </div>
+      <div className="flex flex-1 flex-row flex-wrap justify-center">
         {extractedPokemonData.map((data) => (
           <ListItem
             key={data.id}

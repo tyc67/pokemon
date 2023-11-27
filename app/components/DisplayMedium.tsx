@@ -5,7 +5,7 @@ import { DisplayProps } from '../types/display'
 export default function DisplayMedium({ imageSrc, title, subtitle, link }: DisplayProps) {
   return (
     <div className="lg:w-flex-half mb-4 bg-slate-100 p-8 hover:bg-slate-200 ">
-      <Link href={`/${link}`}>
+      <Link href={link}>
         <div className="flex h-56 flex-1 items-center justify-center">
           <Image src={imageSrc} width={200} height={200} alt="titleImage" />
         </div>
