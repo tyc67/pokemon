@@ -7,18 +7,21 @@ import ListItem from './ListItem'
 import Spinner from './Spinner'
 import { useElementInview } from '../hooks/useElementInView'
 
-export default function MorePokeList() {
-  const [pageKey, setPageKey] = useState<string>('0')
+export default function MorePokeList({ sortOrder }: { sortOrder: string }) {
+  const [pageKey, setPageKey] = useState<number>(0)
   const [pokeList, setPokeList] = useState<PokemonItem[]>([])
-  const { data, isLoading, error } = useFetchNextList(pageKey)
+  const { data, isLoading, error } = useFetchNextList(sortOrder, pageKey, pageKey + 12)
 
   const [attachRef, setAttachRef] = useState(false)
   const { containerRef, inView } = useElementInview({ attach: attachRef })
 
+  useEffect(()=>{
+    setPokeList([])
+  },[sortOrder])
+
   useEffect(() => {
     if (inView && !isLoading) {
-      const nextPage = parseInt(pageKey) + 12
-      setPageKey(nextPage.toString())
+      setPageKey(pageKey + 12)
     }
   }, [inView])
 
@@ -30,8 +33,7 @@ export default function MorePokeList() {
 
   const handleLoadMoreClick = () => {
     setAttachRef(true)
-    const nextPage = parseInt(pageKey) + 12
-    setPageKey(nextPage.toString())
+    setPageKey(pageKey + 12)
   }
 
   return (
@@ -52,7 +54,7 @@ export default function MorePokeList() {
           <Spinner />
         ) : !attachRef ? (
           <button onClick={handleLoadMoreClick}>
-            <p className="rounded bg-blue-500 px-3 py-0.5 text-sm text-slate-50">
+            <p className="rounded bg-nintendo-red px-3 py-0.5 text-sm text-slate-50">
               Load More Button
             </p>
           </button>

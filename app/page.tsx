@@ -17,7 +17,7 @@ export default async function Home() {
   return (
     <>
       <div className="w-full">
-        <div className="flex h-[600px] flex-col bg-green-200 p-6 pb-6 lg:flex-row">
+        <div className="flex h-[600px] flex-col bg-nintendo-red p-6 pb-6 lg:flex-row">
           <DisplayHeroText title={pokemonDataId9.name} link={`/items/${pokemonDataId9.name}`} />
           <div className="relative flex flex-1 items-center justify-center">
             <Image

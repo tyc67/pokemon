@@ -1,31 +1,19 @@
 import { useState, useEffect } from 'react'
-import { getPokemonList, getPokemonByURL } from '../utils/fetch'
 import { type PokemonItem } from '../types/display'
+import { sortViewData } from '../utils/converter'
 
-export const useFetchNextList = (fetchPage: string) => {
+export const useFetchNextList = (sort: string, start: number, end: number) => {
   const [data, setData] = useState<PokemonItem[] | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [error, setError] = useState(null)
 
   useEffect(() => {
     const fetchData = async () => {
-      if (fetchPage === '0') return
+      if (start === 0) return
       setIsLoading(true)
       try {
-        const pokemonListData = await getPokemonList('12', fetchPage)
-        const urls = pokemonListData.results.map((data: any) => data.url) as string[]
-        const extractedPokemonData: PokemonItem[] = await Promise.all(
-          urls.map(async (url) => {
-            const item = await getPokemonByURL(url)
-            return {
-              id: item.id,
-              name: item.name,
-              sprite: item.sprites.other.home.front_default,
-              types: item.types.map((data: any) => data.type.name),
-            }
-          })
-        )
-        setData(extractedPokemonData)
+        const temp = await sortViewData(sort, [start, end])
+        setData(temp)
         setError(null)
       } catch (error: any) {
         setError(error.message)
@@ -34,7 +22,7 @@ export const useFetchNextList = (fetchPage: string) => {
       }
     }
     fetchData()
-  }, [fetchPage])
+  }, [end, sort, start])
 
   return { data, isLoading, error }
 }

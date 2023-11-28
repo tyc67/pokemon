@@ -1,19 +1,15 @@
+import { sortViewData } from '../utils/converter'
 import ListItem from '../components/ListItem'
-import { PokemonItem } from '../types/display'
-import { getPokemonList, getPokemonByURL } from '../utils/fetch'
 import MorePokeList from '../components/MorePokeList'
 import PokemonListBox from '../components/PokemonListBox'
 
-export default async function Pokedex() {
-  const pokemonListData = await getPokemonList('12', '0')
-  const url = pokemonListData.results.map((data: any) => data.url) as string[]
-  const pokemonData = await Promise.all(url.map((url) => getPokemonByURL(url)))
-  const extractedPokemonData: PokemonItem[] = pokemonData.map((item) => ({
-    id: item.id,
-    name: item.name,
-    sprite: item.sprites.other.home.front_default,
-    types: item.types.map((data: any) => data.type.name),
-  }))
+export default async function Pokedex({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined }
+}) {
+  const { sort } = searchParams as { [key: string]: string }
+  const pokemonListViewData = await sortViewData(sort, [0, 12])
 
   return (
     <div className="flex w-full flex-col">
@@ -24,7 +20,7 @@ export default async function Pokedex() {
         </span>
       </div>
       <div className="flex flex-1 flex-row flex-wrap justify-center">
-        {extractedPokemonData.map((data) => (
+        {pokemonListViewData.map((data) => (
           <ListItem
             key={data.id}
             id={data.id}
@@ -34,7 +30,7 @@ export default async function Pokedex() {
           />
         ))}
       </div>
-      <MorePokeList />
+      <MorePokeList sortOrder={sort} />
     </div>
   )
 }
