@@ -3,8 +3,8 @@
 <!-- ## Demo -->
 
 ## Features
-- Built with [Next.js](https://nextjs.org/) and React, styled with [Tailwind CSS](https://tailwindcss.com/) for a responsive UI.
-- Integrates [Pokémon API](https://pokeapi.co/) for advanced AI capabilities.
+- Built with [Next.js](https://nextjs.org/) and [React](https://react.dev/), styled with [Tailwind CSS](https://tailwindcss.com/) for a responsive UI.
+- Integrates [Pokémon API](https://pokeapi.co/).
 - With **Intersection Observer**, allowing you to load more search results as you scroll down the page, providing a smooth and user-friendly browsing experience.
 - Incorporated **Scalable Vector Graphics** (SVG) to dynamically render captivating RadarCharts, offering a unique visual representation of Pokémon attributes.
 
