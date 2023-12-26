@@ -34,5 +34,7 @@ export const typeColor = (type: string) => {
       return '#655DBB'
     case 'dark':
       return '#994D1C'
+    case 'dragon':
+      return '#5D3587'
   }
 }
