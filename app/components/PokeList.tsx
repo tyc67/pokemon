@@ -6,19 +6,24 @@ import PokemonListBox from '../components/PokemonListBox'
 import SearchInput from '../components/SearchInput'
 import { useEffect, useState } from 'react'
 import { type PokemonItem } from '../types/display'
+import { useSearchParams } from 'next/navigation'
+import { sorting } from '../utils/converter'
 
 interface PokeListProps {
-  sortedPokeList: PokemonItem[]
-  sort: string
+  PokemonData: PokemonItem[]
 }
 
-export default function PokeList({ sortedPokeList, sort }: PokeListProps) {
-  const [viewData, setViewData] = useState<PokemonItem[]>(sortedPokeList)
+export default function PokeList({ PokemonData }: PokeListProps) {
+  const searchParams = useSearchParams()
+  const sort = searchParams.get('sort') || ''
+  const initialView = sorting(PokemonData, 'default', [0, 12])
+  const [viewData, setViewData] = useState<PokemonItem[]>(initialView)
   const [isSearching, setIsSearching] = useState<boolean>(false)
 
   useEffect(() => {
+    const sortedPokeList = sorting(PokemonData, sort, [0, 12])
     setViewData(sortedPokeList)
-  }, [sortedPokeList])
+  }, [PokemonData, sort])
 
   const handleSearchData = (data: PokemonItem[]) => {
     setViewData(data)
@@ -26,7 +31,7 @@ export default function PokeList({ sortedPokeList, sort }: PokeListProps) {
   }
 
   const resetViewData = () => {
-    setViewData(sortedPokeList)
+    setViewData(initialView)
     setIsSearching(false)
   }
 

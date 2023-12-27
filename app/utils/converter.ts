@@ -41,3 +41,19 @@ export const sortViewData = async (sort: string, range: [number, number]) => {
       return await convertData(defaultData)
   }
 }
+
+export const sorting = (data: any[] | null, sort: string, range: [number, number]) => {
+  if (!data) return []
+  switch (sort) {
+    case 'num-asc':
+      return data.slice(range[0], range[1])
+    case 'num-desc':
+      return data.reverse().slice(range[0], range[1])
+    case 'a-z':
+      return data.sort((a, b) => a.name.localeCompare(b.name)).slice(range[0], range[1])
+    case 'z-a':
+      return data.sort((a, b) => b.name.localeCompare(a.name)).slice(range[0], range[1])
+    default:
+      return data.slice(range[0], range[1])
+  }
+}
